@@ -1,5 +1,5 @@
-function helloWorld(){
-  return console.log('Hello, world!')
+function helloWorld(phrase){
+  return console.log(phrase)
 }
 
-helloWorld()
+helloWorld('Hello!')
