@@ -1,5 +1,7 @@
-function helloWorld(){
-  return console.log('Hello, world!')
+function greeting(phrase){
+  return console.log(phrase)
 }
 
-helloWorld()
+const greetingPhrase = 'Hi!'
+
+greeting(greetingPhrase)
