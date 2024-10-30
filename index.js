@@ -1,47 +1,89 @@
-//string
-let str1 = 'string with single quotes'
-let str2 = "string with double quotes"
-let strHelper = 3
-let str3 = `i use backtick character ${'!'.repeat(strHelper)}`
-let str4 = new String(true)
-let str5 = strHelper + 'three'
+// task 1
+// creating object
+const counter = { // by literal
+  count:0,
+  increase(){
+  	this.count += 1
+  },
+  nesting: {
+    someKey: 'someValue'
+  },
+  arr: [{a:'a'},{b:'b'}]
+}
 
-//number
-let num1 = 1.23
-let num2 = Number('Infinity')
-let num3 = new Number(45)
-let numHelper = '4'
-let num4 = +numHelper
-let num5 = numHelper - 2
+const counter1 = Object.create(counter,{ // by Object.create method
+  decrease:{
+    value: function(){
+      this.count -=1
+    },
+    writable: true,
+    enumerable: true,
+    configurable: true
+  }
+})
 
-//boolean
-let bool1 = true
-let bool2 = Boolean(null)
-let bool3 = !!str1
+const counter2 = Object.assign(counter1,counter) // by Object.assign method
 
-//null
-let n1 = null
-const n2 = null
+function counterConsructor(count){
+  this.count = count
+  this.increase = function(){
+    this.count += 2
+  }
+}
 
-//undefined
-let und1
-let und2 = undefined
+const counter3 = new counterConsructor(0) // by operator new
 
-//symbol
-let sym1 = Symbol('foo');
-const sym2 = Symbol('bar');
+//task 2
+// copying object
 
-// bigInt
-let bnum1 = 9007199254740991n
-let bnum2 = BigInt(9007199254740991)
+// shallow
+const copy1Counter = {...counter} // common references to ojects and array attributes
+const copy2Counter = Object.assign({},counter) // common references to ojects and array attributes
 
-//----------------------------------------
+// deep
+const copy3Counter = JSON.parse(JSON.stringify(counter)) // no methods :(
 
-const res = "B" + "a" + (1 - "hello");
-// BaNaN
+// const copy4Counter = structuredClone(counter) // Error because counter object contains function
 
-const res2 = (true && 3) + "d";
-// 3d
+const Lodash = require('lodash')
+const copy5Counter = Lodash.cloneDeep(counter)
 
-const res3 = Boolean(true && 3) + "d";
-// trued
+function deepCloneObj(obj){ // manual copying function
+
+  let newObj = {}
+  const objValues = Object.values(obj)
+  const objKeys = Object.keys(obj)
+
+  for(item in objValues) {
+
+    if(Array.isArray(objValues[item])){
+      newObj[objKeys[item]] = [...objValues[item]]
+
+    } else if(typeof objValues[item]==='object'){
+      newObj[objKeys[item]] = deepCloneObj(objValues[item])
+
+    } else {
+      newObj[objKeys[item]] = objValues[item]
+    }
+  }
+
+  return newObj
+}
+
+const newObj = deepCloneObj(counter)
+
+
+//task3
+function makeCounter1(){
+}
+
+let makeCounter2 = function(){
+}
+
+let makeCounter = function makeCounter3(){
+
+}
+
+let makeCounter4 = () => {}
+
+let makeCounter5 = new Function('argument1','argument2', 'console.log(argument1 , argument2)')
