@@ -1,89 +1,80 @@
-// task 1
-// creating object
-const counter = { // by literal
-  count:0,
-  increase(){
-  	this.count += 1
-  },
-  nesting: {
-    someKey: 'someValue'
-  },
-  arr: [{a:'a'},{b:'b'}]
+// task 2
+
+function logger() {
+  console.log(`I output only external context: ${this.item}`);
 }
 
-const counter1 = Object.create(counter,{ // by Object.create method
-  decrease:{
-    value: function(){
-      this.count -=1
-    },
-    writable: true,
-    enumerable: true,
-    configurable: true
-  }
-})
+const obj = { item: "some value" };
 
-const counter2 = Object.assign(counter1,counter) // by Object.assign method
 
-function counterConsructor(count){
-  this.count = count
-  this.increase = function(){
-    this.count += 2
-  }
-}
+let boundLogger = logger.bind(obj)
+boundLogger()
 
-const counter3 = new counterConsructor(0) // by operator new
+logger.call(obj)
+logger.apply(obj)
 
-//task 2
-// copying object
+// task3
+// array
 
-// shallow
-const copy1Counter = {...counter} // common references to ojects and array attributes
-const copy2Counter = Object.assign({},counter) // common references to ojects and array attributes
+const arr1 = [1, 13, -4, 10, 7, 0]
+const sum = arr1.reduce((acc,current) => acc+current)
+// console.log(sum)
 
-// deep
-const copy3Counter = JSON.parse(JSON.stringify(counter)) // no methods :(
+const arr2 = ['Hello', ',', 'world', '!']
+const superStr = arr2.join('')
+// console.log(typeof superStr)
 
-// const copy4Counter = structuredClone(counter) // Error because counter object contains function
+function findMinMax(arr) {
 
-const Lodash = require('lodash')
-const copy5Counter = Lodash.cloneDeep(counter)
+  let max = arr[0];
+  let min = arr[0];
 
-function deepCloneObj(obj){ // manual copying function
-
-  let newObj = {}
-  const objValues = Object.values(obj)
-  const objKeys = Object.keys(obj)
-
-  for(item in objValues) {
-
-    if(Array.isArray(objValues[item])){
-      newObj[objKeys[item]] = [...objValues[item]]
-
-    } else if(typeof objValues[item]==='object'){
-      newObj[objKeys[item]] = deepCloneObj(objValues[item])
-
-    } else {
-      newObj[objKeys[item]] = objValues[item]
+  for (number in arr) {
+    if (arr[number] > max) {
+      max = arr[number];
+    }
+    if (arr[number] < min) {
+      min = arr[number];
     }
   }
 
-  return newObj
+  console.log(`max: ${max},`, `min:${min}`)
 }
 
-const newObj = deepCloneObj(counter)
+// findMinMax(arr1)
 
+//stack
 
-//task3
-function makeCounter1(){
+class Stack {
+
+  constructor(stack) { this.value = stack || [] }
+  pop(){
+    return this.value.pop()
+  }
+  push(elem){
+    return this.value.push(elem)
+  }
 }
 
-let makeCounter2 = function(){
+//queue
+
+class Queue {
+  constructor(queue) { this.value = queue || [] }
+  enqueue(item) {
+    this.value.push(item)
+  }
+  dequeue() {
+    return this.value.shift()
+  }
 }
 
-let makeCounter = function makeCounter3(){
+const q = new Queue([1,2,3])
 
-}
-
-let makeCounter4 = () => {}
-
-let makeCounter5 = new Function('argument1','argument2', 'console.log(argument1 , argument2)')
+q.dequeue()
+console.log('Обслужили первого покупателя', q.value)
+q.enqueue(4)
+console.log('Пришел еще один покупатель', q.value)
+q.enqueue(5)
+console.log('Пришел еще один покупатель', q.value)
+q.dequeue()
+console.log('Обслужили второго покупателя', q.value)
