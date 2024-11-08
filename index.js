@@ -1,52 +1,58 @@
-// task3
+// task 1
 
-// const Person = Object.create({
-//   logInfo(){
-//     console.log(`Hi, my name is ${this.name}, I'm ${this.age}, my hobbies are: ${this.hobby}`)
-//   }
-// })
+let promiseTwo = new Promise((resolve, reject) => { // выполняется как синхронный код
+  resolve("a");
+});
 
-// const Person = new Object({
-//   logInfo(){
-//     console.log(`Hi, my name is ${this.name}, I'm ${this.age}, my hobbies are: ${this.hobby}`)
-//   }
-// })
+promiseTwo // цепочка microtasks
+.then((res) => {
+  return res + "b";
+})
+.then((res) => {
+  return res + "с";
+})
+.finally((res) => { // finally ничего не возвращает
+  return res + "!!!!!!!";
+})
+.catch((res) => { // не выполнится, никто не вернул reject
+  return res + "d";
+})
+.then((res) => {
+  console.log(res); // abc
+});
 
-const Person = {
-  logInfo(){
-    console.log(`Hi, my name is ${this.name}, I'm ${this.age}, my hobbies are: ${this.hobby}`)
-  }
+// task 2
+
+function doSmth() {
+  return Promise.resolve("123");  // выполнится, когда вызовется функция
 }
 
-const Person2 = {
-  name: 'Lada Fomina',
-  age: 21,
-  hobby: ['crochet', ' cycling', ' computer games'],
-  __proto__: Person
+doSmth()
+.then(function (a) { // цепочка microtasks
+  console.log("1", a); // 1 123
+  return a;
+})
+.then(function (b) {
+  console.log("2", b); // 2 123
+  return Promise.reject("321");
+})
+.catch(function (err) {
+  console.log("3", err); // 3 321, вернет промис в состоянии resolve, поэтому заходим вследующий then
+})
+.then(function (c) { // 4 undefined тк ничего не вернули из catch
+  console.log("4", c); // 1 123 2 123 3 321 14 undefined
+  return c;
+});
+
+// task 3
+const arr = [10, 12, 15, 21]
+
+function indexWith3Sec(arr){
+  arr.map((el,index)=>
+    setTimeout(()=>
+      console.log(index)
+    ,3000 * index)
+  )
 }
 
-Person2.logInfo()
-
-// task 4
-
-class PersonThree {
-  constructor(name,age,hobby){
-    this.name = name
-    this.age = age
-    this.hobby = hobby
-  }
-  get personName(){
-    return this.name
-  }
-  set personName(value){
-    this.name = value
-  }
-}
-
-Object.setPrototypeOf(PersonThree.prototype,Person)
-
-const person = new PersonThree('Ivan Ivanov', 10, ['walk', ' play with friends'])
-
-person.personName = 'Ivan Sidorov'
-
-person.logInfo()
+indexWith3Sec(arr)
