@@ -1,20 +1,28 @@
 // task1
 
-function polyfilBind(func, context, ...args){
+arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+total = 13;
+//result = [4, 9]
 
-	return function() {
-		return func.apply( context, [...args]);
+const firstSum = (arr, total) => {
+	let i = 0
+	let j = arr.length - 1
+
+	while(i < j){
+		let result = arr[i]+arr[j]
+
+		if(result > total) {
+			j--
+
+		} else if(result < total) {
+			i++
+
+		} else if(result === total){
+			console.log(`[${arr[i]}, ${arr[j]}]`)
+			break
+		}
 	}
 }
 
-obj = {
-  str:'Hello'
-}
-
-function func(phrase){
-  console.log(`${this.str}, ${phrase}`)
-}
-
-const funcBind = polyfilBind(func, obj, 'world!')
-
-funcBind()
+firstSum(arr,total)
+// Сложность алгоритма O(n), данная функция работает только для отсортированного по возрастанию массива
